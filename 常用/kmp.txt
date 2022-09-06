@@ -1,0 +1,57 @@
+KMP算法，求字符串b在a中所有位置
+#include<stdio.h>
+#include<string.h>
+int kmp[2000000];
+int la,lb,j=0,i; 
+char a[2000000],b[2000000];
+int main()
+{
+    scanf("%s%s",a+1,b+1);
+    la=strlen(a+1);
+    lb=strlen(b+1);
+    for(i=2;i<=lb;i++)//给kmp[i]赋值，kmp的值也可理解为到此数前后缀相等的个数
+	{     
+	    while(j&&b[i]!=b[j+1]) j=kmp[j];    
+        if(b[j+1]==b[i]) j++;    
+        kmp[i]=j;
+    }
+    j=0;
+    for(i=1;i<=la;i++)//比较a与b串 
+	{
+        while(j>0&&b[j+1]!=a[i]) j=kmp[j];
+        if(b[j+1]==a[i]) j++;
+        if(j==lb)
+		{
+			printf("%d ",i-lb);//题目要求下标从0开始 
+			j=kmp[j];
+		}
+    }
+    return 0;
+}
+用kmp算法前后缀和性质（kmp数组）求长度为几的前后缀和相同
+#include<stdio.h>
+#include<string.h>
+int kmp[2000000];
+int la,lb,j=0,i; 
+char a[2000000];
+int ans[2000000],cnt=0;
+int main()
+{
+    scanf("%s",a+1);
+    la=strlen(a+1);
+    for(i=2;i<=la;i++)//给kmp[i]赋值，kmp的值也可理解为到此数前后缀相等的个数
+	{     
+	    while(j&&a[i]!=a[j+1]) j=kmp[j];    
+        if(a[j+1]==a[i]) j++;    
+        kmp[i]=j;
+    }
+    int x=kmp[la];
+    ans[cnt++]=la;
+    while(x!=0)
+    {
+    	ans[cnt++]=x;
+    	x=kmp[x];
+	}
+	for(i=cnt-1;i>=0;i--) printf("%d\n",ans[i]);
+    return 0;
+}
